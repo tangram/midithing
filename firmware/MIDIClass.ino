@@ -356,17 +356,17 @@ int PercussionNoteGate(byte pitch)
       return (0);
     case 38:
       return (1);
-    case 42:
+    case 40:
       return (2);
-    case 45:
+    case 41:
       return (3);
-    case 47:
+    case 43:
       return (5);
-    case 48:
+    case 45:
       return (6);
-    case 49:
+    case 47:
       return (7);
-    case 51:
+    case 48:
       return (8);
   }
   return (-1);
