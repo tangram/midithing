@@ -41,8 +41,8 @@ unsigned int MultiPointConv::intervalConvert(int inp)
   if (interv > 19) {
     interv = 19;
   }
-  int A = DACPoints[interv];   //low output interpolation point
-  int B = DACPoints[interv + 1]; //high output interpolation point
+  int A = DACPoints[interv]; // low output interpolation point
+  int B = DACPoints[interv + 1]; // high output interpolation point
 
   // get value
   unsigned int outp = A + (val - interv * 6) * (B - A) / 6;
@@ -51,7 +51,7 @@ unsigned int MultiPointConv::intervalConvert(int inp)
   } else if (outp > 4095) {
     outp = 4095;
   }
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print("Int: ");
   Serial.print(interv);
   Serial.print(" Low Int: ");
@@ -65,7 +65,7 @@ unsigned int MultiPointConv::intervalConvert(int inp)
   Serial.print(inp);
   Serial.print(" DAC Output: ");
   Serial.println(outp);
-#endif
+  #endif
   return (outp);
 }
 
@@ -86,15 +86,15 @@ byte MultiPointConv::Processnote(byte channel, byte pitch, byte velocity)
     return (0);
   }
 
-  if (val == (interv + 1) * 6 - 1) { //decrease
+  if (val == (interv + 1) * 6 - 1) { // decrease
     DACPoints[interv + 1]--;
-  } else if (val == interv * 6 + 1) { //increase
+  } else if (val == interv * 6 + 1) { // increase
     DACPoints[interv]++;
   } else {
     return (0);
   }
 
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print("Note: ");
   Serial.print(val);
   Serial.print("Int: ");
@@ -103,6 +103,6 @@ byte MultiPointConv::Processnote(byte channel, byte pitch, byte velocity)
   Serial.print(pitch);
   Serial.print(" DAC New value: ");
   Serial.println(DACPoints[interv]);
-#endif
+  #endif
   return (1);
 }

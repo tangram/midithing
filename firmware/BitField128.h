@@ -3,6 +3,9 @@
 
 #include <limits.h>
 
+// bitfield implementation adapted from
+// http://stackoverflow.com/questions/1590893/error-trying-to-define-a-1-024-bit-128-byte-bit-field
+
 typedef byte BitField128[16]; // 128 bits
 
 static inline void setbit128(BitField128 field, size_t idx)

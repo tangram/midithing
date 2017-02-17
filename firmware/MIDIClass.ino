@@ -80,7 +80,7 @@ void MIDICV::processNoteOff(byte pitch)
     return; // Note on for received note off not found
   }
   if (!notes.setPlaying(pitch, 0)) {
-    playNoteOff(); //Leaving Pitch and velocity value and Gate down
+    playNoteOff(); // Leaving Pitch and velocity value and Gate down
 #ifdef PRINTDEBUG
     Serial.print(" Last Note Off: ");
     Serial.println(pitch);
@@ -219,13 +219,13 @@ void MIDICV::LearnThis(byte channel, byte pitch, byte velocity)
   if (pitchDAC == NULL) {
     return;
   }
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print(channel);
   Serial.print(" Channel. New min Input: ");
   Serial.println(pitch);
   Serial.print(LearnStep);
   Serial.println(" Step, End Learn Mode");
-#endif
+  #endif
   LearnInitTime = millis();
   notes.clear();
   LearnStep++;
@@ -288,13 +288,15 @@ void MIDICV::LearnThis(byte channel, byte pitch, byte velocity)
         endLearn = true;
       }
       break;
-      /* default:
-         Blink.setBlink(100, 0, -1, PINSTARTSTOP);
-         delay(200);
-         Blink.setBlink(0, 0, 0);
-         Blink.setBlink(100, 1, 1, PINCLOCK);
-         delay(200);
-        break; */
+    /*
+    default:
+      Blink.setBlink(100, 0, -1, PINSTARTSTOP);
+      delay(200);
+      Blink.setBlink(0, 0, 0);
+      Blink.setBlink(100, 1, 1, PINCLOCK);
+      delay(200);
+      break;
+     */
   }
 
   if (channelExists) {
@@ -323,36 +325,27 @@ bool MIDICV::ChannelExists(byte channel, byte mininput, byte learnstep) {
 }
 
 void MIDICV::SetOldLearn(byte channel, byte mininput) {
-
   midiChannel_old = channel;
   minInput_old    = mininput;
-
 }
 
 void MIDICV::SetLearn(byte channel, byte mininput) {
-
   midiChannel           = channel;
   pitchDAC->minInput    = mininput;
-
 }
 
 void MIDICV::ResetOldLearn() {
-
   SetOldLearn(0, 0);
-
 }
 
 void MIDICV::ResetLearn() {
   SetLearn(midiChannel_old, minInput_old);
-
 }
 
 void MIDICV::InitLearn() {
   SetOldLearn(midiChannel, pitchDAC->minInput);
-
 }
 
-///////////////////////////////////
 // Support functions for MIDI class
 
 // Check percussion notes and return associated gate
@@ -391,7 +384,6 @@ void AllNotesOff(void)
 // Read MIDI properties from eeprom
 int ReadMIDIeeprom(void)
 {
-  //return -1;
   MIDICV tempMIDI;
   MultiPointConv tempConv;
   int numVoices, voiceMode;
@@ -399,12 +391,12 @@ int ReadMIDIeeprom(void)
 
   eeprom_read_block((void *)&numVoices, (void *)0, sizeof(numVoices));
   eeprom_read_block((void *)&voiceMode, (void *)sizeof(int), sizeof(voiceMode));
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print("Read EEPROM Num Voices");
   Serial.print(numVoices);
   Serial.print(" / Voice Mode: ");
   Serial.println(voiceMode);
-#endif
+  #endif
   if (numVoices < 1 || numVoices > 4) {
     return (-1);
   }
@@ -433,16 +425,16 @@ int ReadMIDIeeprom(void)
                       sizeof(tempMIDI));
     memcpy(&Voice[i], &tempMIDI, sizeof(Voice[i]));
     /*
-       #ifdef PRINTDEBUG
-       Serial.print("DACConv addr: ");
-       Serial.print((sizeof(int)*2+i*(sizeof(TempConv)+sizeof(TempMIDI))));
-       Serial.print(" /2: ");
-       Serial.println((sizeof(int)*2+sizeof(TempConv)+i*(sizeof(TempConv)+sizeof(TempMIDI))));
-       Serial.print("DACConv 1: ");
-       Serial.print(DACConv[i].DACPoints[1]);
-       Serial.print(" /2: ");
-       Serial.println(DACConv[i].DACPoints[2]);
-       #endif
+    #ifdef PRINTDEBUG
+    Serial.print("DACConv addr: ");
+    Serial.print((sizeof(int)*2+i*(sizeof(TempConv)+sizeof(TempMIDI))));
+    Serial.print(" /2: ");
+    Serial.println((sizeof(int)*2+sizeof(TempConv)+i*(sizeof(TempConv)+sizeof(TempMIDI))));
+    Serial.print("DACConv 1: ");
+    Serial.print(DACConv[i].DACPoints[1]);
+    Serial.print(" /2: ");
+    Serial.println(DACConv[i].DACPoints[2]);
+    #endif
     */
   }
   NumVoices = numVoices;
@@ -454,15 +446,14 @@ int ReadMIDIeeprom(void)
 // Write MIDI properties from eeprom
 void WriteMIDIeeprom(void)
 {
-  //return;
   int i;
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.println("Write MIDI");
   Serial.print("Num Voices: ");
   Serial.print(NumVoices);
   Serial.print(" / Voice Mode: ");
   Serial.println(VoiceMode);
-#endif
+  #endif
 
   // Store in EEPROM number of channels and MIDI mode
   eeprom_write_block((void *)&NumVoices, (void *)0, sizeof(NumVoices));
@@ -480,16 +471,16 @@ void WriteMIDIeeprom(void)
                        (void *)(sizeof(NumVoices) * 2 + sizeof(DACConv[i]) + i *
                                 (sizeof(Voice[i]) + sizeof(DACConv[i]))), sizeof(Voice[i]));
     /*
-       #ifdef PRINTDEBUG
-       Serial.print("DACConv addr: ");
-       Serial.print((sizeof(NumVoices)*2+i*(sizeof(DACConv[i])+sizeof(Voice[i]))));
-       Serial.print(" /2: ");
-       Serial.println((sizeof(NumVoices)*2+sizeof(DACConv[i])+i*(sizeof(Voice[i])+sizeof(DACConv[i]))));
-       Serial.print("DACConv 1: ");
-       Serial.print(DACConv[i].DACPoints[1]);
-       Serial.print(" /2: ");
-       Serial.println(DACConv[i].DACPoints[2]);
-       #endif
+    #ifdef PRINTDEBUG
+    Serial.print("DACConv addr: ");
+    Serial.print((sizeof(NumVoices)*2+i*(sizeof(DACConv[i])+sizeof(Voice[i]))));
+    Serial.print(" /2: ");
+    Serial.println((sizeof(NumVoices)*2+sizeof(DACConv[i])+i*(sizeof(Voice[i])+sizeof(DACConv[i]))));
+    Serial.print("DACConv 1: ");
+    Serial.print(DACConv[i].DACPoints[1]);
+    Serial.print(" /2: ");
+    Serial.println(DACConv[i].DACPoints[2]);
+    #endif
     */
   }
 }
@@ -591,10 +582,10 @@ void SetVoiceMode(int mode)
     default:
       return;
   }
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print("New Mode: ");
   Serial.println(mode);
-#endif
+  #endif
 
   WriteMIDIeeprom();
 }

@@ -29,7 +29,7 @@
 #define __MULTIPOINTCONV_H__
 
 // Utility class to convert MIDI to CV Range
-// Linear scale input to output (defined as minimun/range)
+// Linear scale input to output (defined as minimum/range)
 class RangeConv
 {
   public:
@@ -38,7 +38,7 @@ class RangeConv
     unsigned int minDAC, rangeDAC;
     RangeConv()
     {
-      // Default to 12 bits in the CV for 127 MIDI values;
+      // Default to 12 bits in the CV for 127 MIDI values
       minInput = 0;
       rangeInput = 127;
       minDAC = 0;
@@ -52,20 +52,21 @@ class RangeConv
 };
 
 // Utility class to convert MIDI to CV Range
-// Multi-Linear scale input to output (defined as 20 fix points and output as interpolation between each pair of fix points)
+// Multi-Linear scale input to output (defined as 20 fixed points and
+// output as interpolation between each pair of fixed points)
 class MultiPointConv : public RangeConv
 {
   public:
     int DACPoints[21];
     MultiPointConv()
     {
-      // Default to 12 bits in the CV for 120 MIDI values;
+      // Default to 12 bits in the CV for 120 MIDI values
       minInput = 0;
       rangeInput = 120;
       minDAC = 0;
       rangeDAC = 4095;
       for (int i = 0; i < 21; i++) {
-        DACPoints[i] = i * 204.75;  //4095/20;
+        DACPoints[i] = i * 204.75;  // 4095/20
       }
     }
     // Make conversion

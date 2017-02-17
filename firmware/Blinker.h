@@ -25,7 +25,7 @@
 // -----------------------------------------------------------------------------
 //
 
-//Class helper to blink led
+// Class helper to blink LED
 class Blinker
 {
   public:
@@ -35,7 +35,6 @@ class Blinker
     int countBlinks = 0;
     byte pinLED = 0;
 
-  public:
     Blinker(byte port)
     {
       pinLED = port;
@@ -45,16 +44,22 @@ class Blinker
     void playBlink(void);
 };
 
-extern Blinker Gates[10]; // Gates triggers
+extern Blinker Gates[10]; // Gate triggers
 
 /*
-   // Blink a double color two	pin LED
-   class DualBlinker: public Blinker{
-   public:
-   byte pinLED1=0;
-   byte pinLED2=0;
-   public:
-   DualBlinker(byte port1, byte port2) { pinLED = port1; pinLED1 = port1; pinLED2 = port2;}
-   void setBlink( unsigned long periodon, unsigned long periodoff, int times, byte color);
-   };
+// Blink a double color two	pin LED
+class DualBlinker: public Blinker
+{
+  public:
+    byte pinLED1=0;
+    byte pinLED2=0;
+
+    DualBlinker(byte port1, byte port2)
+    {
+      pinLED = port1;
+      pinLED1 = port1;
+      pinLED2 = port2;
+    }
+    void setBlink(unsigned long periodon, unsigned long periodoff, int times, byte color);
+};
 */

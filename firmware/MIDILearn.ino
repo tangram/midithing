@@ -24,10 +24,7 @@
 //
 // -----------------------------------------------------------------------------
 
-//# define ERRORCYCLES 30
-
-//////////////////////////////////////////////
-// Learn mode
+// Learn Mode
 // Learn Mode selected
 
 // Initialize Learn Mode
@@ -46,9 +43,9 @@ void EnterLearnMode(void)
 
   // Init timer
   LearnInitTime = millis();
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.println("Init Learn Mode");
-#endif
+  #endif
 }
 
 // Learn Mode Cycle function
@@ -56,7 +53,8 @@ void DoLearnCycle(void)
 {
   unsigned long current = millis();
 
- /* // 10 seconds learn time  "Only cancel with button
+  /*
+  // 10 seconds learn time  "Only cancel with button
   if (current > LearnInitTime + 10000) {
     CancelLearnMode();
       // Set normal mode
@@ -65,15 +63,15 @@ void DoLearnCycle(void)
       Blink.setBlink(0, 0, 0);
       Blink.setBlink(0, 0, 0, PINLED);
       // Store value in EEPROM
-      WriteMIDIeeprom();*/
+      WriteMIDIeeprom();
+  }
+   */
 
-#ifdef PRINTDEBUG
-    Serial.println("End Learn Mode");
-#endif
-  //}
+  #ifdef PRINTDEBUG
+  Serial.println("End Learn Mode");
+  #endif
 }
 
-//////////////////////////////
 // Initialize Cal Mode
 void EnterCalMode(void)
 {
@@ -91,9 +89,9 @@ void EnterCalMode(void)
 
   // Init timer
   LearnInitTime = millis();
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.println("Init Cal Mode");
-#endif
+  #endif
 }
 
 // Cal Mode Cycle function
@@ -103,12 +101,12 @@ void DoCalCycle(void)
 
   // After 55 seconds without receiving a note, exit calibration
   if (current > LearnInitTime + 55000) {
-#ifdef PRINTDEBUG
+    #ifdef PRINTDEBUG
     Serial.print(LearnInitTime);
     Serial.print(" msec ");
     Serial.println(current);
     Serial.println("Time expired for Calibration");
-#endif
+    #endif
     EndCalMode();
   }
 }
@@ -124,16 +122,17 @@ void EndCalMode(void)
   Blink.setBlink(0, 0, 0);
   Blink.setBlink(0, 0, 0, PINLED2);
 
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.println("End Cal Mode");
-#endif
+  #endif
 }
 
 byte CalProcessNote(byte channel, byte pitch, byte velocity)
 {
   byte lv_return = 1;
 
-  if (channel == 11 || channel == 12 || channel == 13 || channel == 14) { // Channels 1-4 for DAC calibration 0-3
+  // Channels 1-4 for DAC calibration 0-3
+  if (channel == 11 || channel == 12 || channel == 13 || channel == 14) {
     channel = channel - 10;
     lv_return = (DACConv[channel - 1].Processnote(channel, pitch, velocity));
   } else if (channel >= 1 && channel <= 10) {
@@ -210,7 +209,7 @@ byte CalProcessNote(byte channel, byte pitch, byte velocity)
       Blink.setBlink(100, 0, -1, PINLED2);
       break;
     default:
-      //do nothing
+      // do nothing
       break;
   }
 

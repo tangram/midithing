@@ -24,8 +24,6 @@
 //
 // -----------------------------------------------------------------------------
 //
-// bitfield implementation adapted from
-// http://stackoverflow.com/questions/1590893/error-trying-to-define-a-1-024-bit-128-byte-bit-field
 
 #include "firmware.h"
 #include "MultiPointConv.h"
@@ -46,23 +44,25 @@ byte CalProcessNote(byte channel, byte pitch, byte velocity);
 byte getElementalPitch(byte pitch);
 int PercussionNoteGate(byte pitch);
 
-//MIDI
+// MIDI
 class MIDICV;
 extern MIDICV Voice[4]; // Define up to four MIDI channels
 extern int NumVoices; // Number of MIDI channels in use
-extern int VoiceMode; // MIDI mode Set to quad mode by default
+extern int VoiceMode; // MIDI mode set to quad mode by default
 
 #define MAXNOTES 8
 
 static bool IsPolyMode() {
-  return (   VoiceMode == POLYFIRST
-          || VoiceMode == POLYLAST
-          || VoiceMode == POLYHIGH
-          || VoiceMode == POLYLOW
-          || VoiceMode == DUOFIRST
-          || VoiceMode == DUOLAST
-          || VoiceMode == DUOHIGH
-          || VoiceMode == DUOLOW);
+  return (
+       VoiceMode == POLYFIRST
+    || VoiceMode == POLYLAST
+    || VoiceMode == POLYHIGH
+    || VoiceMode == POLYLOW
+    || VoiceMode == DUOFIRST
+    || VoiceMode == DUOLAST
+    || VoiceMode == DUOHIGH
+    || VoiceMode == DUOLOW
+  );
 }
 
 static bool IsPercMode() {
@@ -154,8 +154,7 @@ class NoteEventInfo {
 
 class MIDICV {
 
-    //////////////////////////////////////////////
-    //Variables
+    // Variables
   public:
     // Var MIDI
     byte midiChannel     = 1; // Initial channel
@@ -166,7 +165,6 @@ class MIDICV {
     // Var MIDI-DAC
     class MultiPointConv *pitchDAC, *velDAC, *bendDAC, *modDAC;
 
-    //////////////////////////////////////////////
     // Function declaration
     MIDICV() {}
 
@@ -174,9 +172,9 @@ class MIDICV {
     void processNoteOff(byte pitch);
     void processBend(int bend);
     void processMod(byte value);
-#ifdef PRINTDEBUG
+    #ifdef PRINTDEBUG
     void printNotes(void);
-#endif
+    #endif
     byte checkRepeat(byte pitch);
     void playNote(byte note, byte plvelocity);
     void playNoteOff(void);
@@ -464,7 +462,7 @@ class VoiceSelector {
       }
 
       if (!velocity) {
-        removeFromPool(pitch); //cleanup
+        removeFromPool(pitch); // cleanup
         return -1;
       }
 

@@ -30,9 +30,8 @@
 #include "MIDIClass.h"
 #include "MultiPointConv.h"
 
-//////////////////////////////////////////////
-//Variables
 
+// Variables
 // Var I2C DAC
 mcp4728 Dac = mcp4728(0); // instantiate mcp4728 object, Device ID = 0
 MultiPointConv DACConv[4];
@@ -56,7 +55,7 @@ struct MIDISettings : public midi::DefaultSettings {
 
 MIDI_CREATE_CUSTOM_INSTANCE(HardwareSerial, Serial, MIDI, MIDISettings);
 
-//////////////////////////////////////////////
+
 // Initialization
 void setup()
 {
@@ -112,23 +111,23 @@ void setup()
   MIDI.setHandleNoteOff(HandleNoteOff); // Handle for NoteOff
   MIDI.setHandlePitchBend(HandlePitchBend); // Handle for Pitch Bend
   MIDI.setHandleControlChange(HandleControlChange); // Handle for CC
-#ifdef STARTSTOPCONT
+  #ifdef STARTSTOPCONT
   MIDI.setHandleStart(HandleStart); // Handle Start, Continue, Stop
   MIDI.setHandleContinue(HandleContinue);
   MIDI.setHandleStop(HandleStop);
-#endif
+  #endif
   MIDI.setHandleClock(HandleClock);
   MIDI.begin(MIDI_CHANNEL_OMNI); // Listen to all channels
 
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.println("Init MIDItoCV...");
-#endif
+  #endif
 
   // Read MIDI Channels from EEPROM and store
   if (ReadMIDIeeprom() == -1) {
-#ifdef PRINTDEBUG
+    #ifdef PRINTDEBUG
     Serial.println("No EEPROM Read");
-#endif
+    #endif
     // Set Mode manually
     //SetVoiceMode(MONOMIDI);
     //SetVoiceMode(DUALMIDI);
@@ -143,10 +142,10 @@ void setup()
   delay(50);
   Dac.analogWrite(0, 0, 0, 0);
 
-#ifdef CALIBRATION
+  #ifdef CALIBRATION
   analogReference(INTERNAL);
-#endif
-  //LIGHTSHOW TIME!!
+  #endif
+  // LIGHTSHOW TIME!!
   Blink.setBlink(50, 50, 3, PINLED);
   delay(200);
   Blink.setBlink(0, 0, 0);
@@ -167,15 +166,16 @@ void setup()
   Blink.setBlink(0, 0, 0);
   Blink.setBlink(50, 50, 3, PINCLOCK);
   delay(200);
-/*  Blink.setBlink(0, 0, 0);
+  /*
+  Blink.setBlink(0, 0, 0);
   Blink.setBlink(50, 50, 3, PINSTARTSTOP);
-  delay(200);*/
-
+  delay(200);
+   */
   Blink.setBlink(0, 0, 0);
 
 }
 
-//////////////////////////////////////////////
+
 // Main Loop
 void loop()
 {
@@ -228,23 +228,23 @@ void loop()
   }
 }
 
-//////////////////////////////////////////////
+
 // DAC function definition
 // Send value val to DAC port
 void  SendvaltoDAC(unsigned int port, unsigned int val)
 {
   Dac.analogWrite(port, val); // write to input register of a DAC. Channel 0-3, Value 0-4095
 
-#ifdef PRINTDEBUG
+  #ifdef PRINTDEBUG
   Serial.print(port);
   Serial.print(" DAC = ");
   Serial.println(val);
-#endif
+  #endif
 }
 
 
 void BlinkOK(void) {
-  //BLINK OK
+  // BLINK OK
   Blink.setBlink(0, 0, 0);
   Blink.setBlink(100, 1, 1, PINLED);
   delay(200);
@@ -255,7 +255,7 @@ void BlinkOK(void) {
 }
 
 void BlinkKO(void) {
-  //XXX BLINK ERROR
+  // XXX BLINK ERROR
   Blink.setBlink(0, 0, 0);
   Blink.setBlink(0, 0, 0, PINLED);
   Blink.setBlink(100, 1, 1, PINSTARTSTOP);
